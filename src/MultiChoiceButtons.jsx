@@ -1,25 +1,4 @@
-import { useState } from "react";
-import { SubmitButton } from "./SubmitButton";
-
-export function MultiChoiceButton() {
-  const [isSelected, setIsSelected] = useState([]);
-
-  function toggleButton(id) {
-    setIsSelected((prevSelection) => {
-      const updatedSelection = { ...prevSelection, [id]: !prevSelection[id] };
-
-      if (updatedSelection[id]) {
-        Object.keys(updatedSelection).forEach((buttonId) => {
-          if (buttonId !== id) {
-            updatedSelection[buttonId] = false;
-          }
-        });
-      }
-
-      return updatedSelection;
-    });
-  }
-
+export function MultiChoiceButtons({ toggleButton, isSelected }) {
   return (
     <>
       <li>
@@ -75,7 +54,6 @@ export function MultiChoiceButton() {
         <br />
         <p>Choice</p>
       </li>
-      <SubmitButton />
     </>
   );
 }

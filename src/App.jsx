@@ -1,34 +1,40 @@
 import { useState, useEffect } from "react";
-import "./App.css";
-import { MultiChoiceButton } from "./MultiChoiceButton";
+import { MultiChoiceButtons } from "./MultiChoiceButtons";
+import { Timer } from "./Timer";
 import { Question } from "./Question";
 
+import "./App.css";
+
 function App() {
-  const [seconds, setSeconds] = useState("");
+  const [isSelected, setIsSelected] = useState([]);
 
-  useEffect(() => {
-    if (seconds <= 0) return;
+  function toggleButton(id) {
+    setIsSelected((prevSelection) => {
+      const updatedSelection = { ...prevSelection, [id]: !prevSelection[id] };
 
-    const timer = setInterval(() => {
-      setSeconds((prevSeconds) => prevSeconds - 1);
-    }, 1000);
+      if (updatedSelection[id]) {
+        Object.keys(updatedSelection).forEach((buttonId) => {
+          if (buttonId !== id) {
+            updatedSelection[buttonId] = false;
+          }
+        });
+      }
 
-    return () => {
-      clearInterval(timer);
-    };
-  }, [seconds]);
+      return updatedSelection;
+    });
+  }
 
   return (
     <>
       <div>
-        {seconds > 0 ? <p>Timer: {seconds}</p> : <h1>GAME OVER</h1>}
-
-        <button onClick={() => setSeconds(10)}>Start Button</button>
-
+        <Timer />
         <Question />
 
         <ul style={{ listStyleType: "none" }}>
-          <MultiChoiceButton />
+          <MultiChoiceButtons
+            toggleButton={toggleButton}
+            isSelected={isSelected}
+          />
         </ul>
       </div>
     </>
