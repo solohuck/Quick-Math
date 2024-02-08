@@ -5,3 +5,7 @@
 .incorrect {
   background-color: red;
 }
+
+.remove {
+  display: none;
+}

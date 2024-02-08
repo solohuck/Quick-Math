@@ -3,6 +3,8 @@ import { useState, useEffect } from "react";
 import "./App.css";
 
 function App() {
+  const [selectedAnswer, setSelectedAnswer] = useState();
+  const [remove, setRemove] = useState(true);
   const [lives, setLives] = useState(3);
   const [time, setTime] = useState("");
   const [checkAnswer, setCheckAnswer] = useState(false);
@@ -16,7 +18,9 @@ function App() {
   const [allPossibleAnswers, setAllPossibleAnswers] = useState([]);
 
   useEffect(() => {
-    if (!time || checkAnswer) return;
+    if (!time || checkAnswer) {
+      return;
+    }
 
     const timer = setInterval(() => {
       setTime(time - 1);
@@ -96,13 +100,6 @@ function App() {
         break;
     }
 
-    // IF the correct answer is clicked THEN the button will turn green
-    // WHEN the button is green THEN the Timer will be paused
-    // WHEN the timer is paused THEN the next button will be displayed
-    // WHEN the next button is clicked THEN a new question wil be generated
-
-    // IF the incorrect answer is clicked THEN the button will turn red
-
     if (newAnswer % 1 !== 0) {
       generateQuestion();
     } else {
@@ -111,22 +108,29 @@ function App() {
       setOperation(newOperation);
       setCorrectAnswer(newAnswer);
       setCheckAnswer("");
+      setSelectedAnswer("reset");
+      setTimerText("Next");
     }
   }
 
-  const handleAnswerButtonClick = (selectedAnswer) => {
-    if (selectedAnswer !== correctAnswer) {
+  const handleAnswerClicked = (answer) => {
+    setCheckAnswer(true);
+
+    if (answer === correctAnswer) {
+      setSelectedAnswer("correct");
     } else {
+      setSelectedAnswer(answer);
     }
   };
 
-  const handleAnswerClicked = () => {
-    setCheckAnswer(true);
-  };
+  useEffect(() => {
+    console.log(selectedAnswer);
+  }, [selectedAnswer]);
 
   const handleButtonClick = () => {
     generateQuestion();
     setTime(10);
+    setRemove(false);
   };
 
   useEffect(() => {
@@ -139,29 +143,36 @@ function App() {
     displayAnswers();
   }, [incorrectAnswers, correctAnswer]);
 
-  useEffect(() => {
-    handleAnswerButtonClick();
-  }, [allPossibleAnswers]);
-
   return (
     <>
       <div>
         <h1>Timer: {time} </h1>
         <p>This is the question: </p>
-        {displayQuestion} = {correctAnswer !== null ? correctAnswer : ""}
+        <div className={remove ? "remove" : ""}>
+          {displayQuestion} = {correctAnswer !== null ? correctAnswer : ""}
+        </div>
         <br />
-        <button onClick={handleButtonClick} disabled={isRunning}>
+        <button
+          onClick={handleButtonClick}
+          className={!checkAnswer && !remove ? "remove" : ""}
+        >
           {timerText}
         </button>
-        <ul>
-          {allPossibleAnswers.map((answer, index) => (
-            <li key={index} style={{ listStyle: "none" }}>
+        <ul className={remove ? "remove" : ""}>
+          {allPossibleAnswers.map((answer) => (
+            <li key={answer} style={{ listStyle: "none" }}>
               <button
-                onClick={handleAnswerClicked}
-                // onClick={() => handleAnswerButtonClick(answer)}
-                // className={
-                //   checkAnswer && answer === correctAnswer ? "correct" : ""
-                // }
+                disabled={checkAnswer}
+                onClick={() => handleAnswerClicked(answer)}
+                className={
+                  selectedAnswer === answer
+                    ? answer === correctAnswer
+                      ? "correct"
+                      : "incorrect"
+                    : selectedAnswer === "correct" && answer === correctAnswer
+                    ? "correct"
+                    : ""
+                }
               >
                 {answer}
               </button>
