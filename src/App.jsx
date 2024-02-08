@@ -24,10 +24,16 @@ function App() {
   // IF the answer is incorrect then that amount of time will be deleted from the score
   // IF no answer is chosen then 5 points will be taken from the score
 
+  // Restart:
+  // setScore(10)
+  // setGameOver(false)
+  // setTime(10)
+  // set text  back to timer
+  // restart button goes away
+
   useEffect(() => {
     if (time === 0) {
       handleAnswerClicked();
-      console.log("time is zero: first");
     }
     if (!time || checkAnswer || gameOver) {
       return;
@@ -58,6 +64,7 @@ function App() {
     for (let i = 0; i < 3; i++) {
       const optionOperation = addOrSubArray[i % addOrSubArray.length];
       const randomNumber = Math.floor(Math.random() * 10) + 1;
+      console.log(`random number: ${randomNumber}`);
 
       switch (optionOperation) {
         case "+":
@@ -143,8 +150,13 @@ function App() {
       }
     }
 
-    if (time === 0) {
+    if (time === 0 && score >= 5) {
       theScore = score - 5;
+      setSelectedAnswer("correct");
+      setTimerText("Next");
+    } else if (time === 0 && score < 5) {
+      theScore = 0;
+      setSelectedAnswer("correct");
     }
     return setScore(theScore);
   };
@@ -153,6 +165,12 @@ function App() {
     generateQuestion();
     setTime(3);
     setRemove(false);
+
+    if (score <= 0) {
+      setScore(10);
+      setGameOver(false);
+      setTime(10);
+    }
   };
 
   useEffect(() => {
@@ -166,7 +184,7 @@ function App() {
   }, [incorrectAnswers, correctAnswer]);
 
   useEffect(() => {
-    console.log(`score 2: ${score}`);
+    console.log(score);
     if (score <= 0) {
       setGameOver(true);
       setTimerText("Restart");
@@ -185,7 +203,7 @@ function App() {
         <br />
         <button
           onClick={handleButtonClick}
-          className={!checkAnswer && !remove ? "remove" : ""}
+          className={!checkAnswer && !remove && time > 0 ? "remove" : ""}
         >
           {timerText}
         </button>
@@ -193,7 +211,7 @@ function App() {
           {allPossibleAnswers.map((answer) => (
             <li key={answer} style={{ listStyle: "none" }}>
               <button
-                disabled={checkAnswer}
+                disabled={checkAnswer || selectedAnswer === "correct"}
                 onClick={() => handleAnswerClicked(answer)}
                 className={
                   selectedAnswer === answer
