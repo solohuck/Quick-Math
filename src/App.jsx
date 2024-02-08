@@ -5,8 +5,10 @@ import "./App.css";
 function App() {
   const [selectedAnswer, setSelectedAnswer] = useState();
   const [remove, setRemove] = useState(true);
-  const [lives, setLives] = useState(3);
-  const [time, setTime] = useState("");
+  const [reset, setReset] = useState(false);
+  const [score, setScore] = useState(10);
+  const [time, setTime] = useState(null);
+  const [gameOver, setGameOver] = useState(false);
   const [checkAnswer, setCheckAnswer] = useState(false);
   const [isRunning, setIsRunning] = useState(false);
   const [timerText, setTimerText] = useState("Start");
@@ -17,8 +19,17 @@ function App() {
   const [incorrectAnswers, setIncorrectAnswers] = useState([]);
   const [allPossibleAnswers, setAllPossibleAnswers] = useState([]);
 
+  // Start with 10 points
+  // IF an answer is picked and its correct then the remaning time will be added to the user score
+  // IF the answer is incorrect then that amount of time will be deleted from the score
+  // IF no answer is chosen then 5 points will be taken from the score
+
   useEffect(() => {
-    if (!time || checkAnswer) {
+    if (time === 0) {
+      handleAnswerClicked();
+      console.log("time is zero: first");
+    }
+    if (!time || checkAnswer || gameOver) {
       return;
     }
 
@@ -114,22 +125,33 @@ function App() {
   }
 
   const handleAnswerClicked = (answer) => {
-    setCheckAnswer(true);
+    let theScore;
+    if (time > 0 && theScore !== score - 5) {
+      setCheckAnswer(true);
+    }
 
     if (answer === correctAnswer) {
       setSelectedAnswer("correct");
+      theScore = time + score;
     } else {
       setSelectedAnswer(answer);
-    }
-  };
 
-  useEffect(() => {
-    console.log(selectedAnswer);
-  }, [selectedAnswer]);
+      if (time < score && score > 0) {
+        theScore = score - time;
+      } else {
+        theScore = 0;
+      }
+    }
+
+    if (time === 0) {
+      theScore = score - 5;
+    }
+    return setScore(theScore);
+  };
 
   const handleButtonClick = () => {
     generateQuestion();
-    setTime(10);
+    setTime(3);
     setRemove(false);
   };
 
@@ -143,11 +165,20 @@ function App() {
     displayAnswers();
   }, [incorrectAnswers, correctAnswer]);
 
+  useEffect(() => {
+    console.log(`score 2: ${score}`);
+    if (score <= 0) {
+      setGameOver(true);
+      setTimerText("Restart");
+    }
+  }, [score]);
+
   return (
     <>
       <div>
-        <h1>Timer: {time} </h1>
-        <p>This is the question: </p>
+        <h1 className={gameOver ? "remove" : ""}>Timer: {time} </h1>
+        <h1 className={!gameOver ? "remove" : ""}> Game Over</h1>
+        <p>Score: {score} </p>
         <div className={remove ? "remove" : ""}>
           {displayQuestion} = {correctAnswer !== null ? correctAnswer : ""}
         </div>
