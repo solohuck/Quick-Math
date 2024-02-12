@@ -4,6 +4,7 @@ import "./App.css";
 
 function App() {
   const [selectedAnswer, setSelectedAnswer] = useState();
+  const [mainClock, setMainClock] = useState(10);
   const [remove, setRemove] = useState(true);
   const [reset, setReset] = useState(false);
   const [score, setScore] = useState(10);
@@ -166,10 +167,11 @@ function App() {
     setTime(3);
     setRemove(false);
 
-    if (score <= 0) {
+    if (score <= 0 || mainClock === 0) {
       setScore(10);
       setGameOver(false);
       setTime(10);
+      setMainClock(60);
     }
   };
 
@@ -184,50 +186,88 @@ function App() {
   }, [incorrectAnswers, correctAnswer]);
 
   useEffect(() => {
-    console.log(score);
     if (score <= 0) {
       setGameOver(true);
       setTimerText("Restart");
     }
   }, [score]);
 
+  useEffect(() => {
+    if (mainClock <= 0 || score === 0) {
+      setMainClock(0);
+    } else if (timerText === "Next") {
+      const mainTimer = setInterval(() => {
+        setMainClock(mainClock - 1);
+      }, 1000);
+
+      return () => clearInterval(mainTimer);
+    }
+  }, [mainClock, timerText]);
+
+  useEffect(() => {
+    if (mainClock === 0) {
+      setScore(score);
+      setGameOver(true);
+      setTime(0);
+      setTimerText("Restart");
+    }
+  }, [gameOver, mainClock]);
+
+  useEffect(() => {
+    console.log(`score: ${score}`);
+  }, [score]);
+
   return (
     <>
       <div>
-        <h1 className={gameOver ? "remove" : ""}>Timer: {time} </h1>
-        <h1 className={!gameOver ? "remove" : ""}> Game Over</h1>
-        <p>Score: {score} </p>
-        <div className={remove ? "remove" : ""}>
-          {displayQuestion} = {correctAnswer !== null ? correctAnswer : ""}
+        <h1 className={gameOver || remove ? "remove" : ""}>Timer: {time} </h1>
+        <div className={!gameOver || score > 0 ? "remove" : ""}>
+          <h1>Game Over</h1>
         </div>
-        <br />
+        <div className={!gameOver || score <= 0 ? "remove" : ""}>
+          <h1>Finished</h1>
+          <h2>score: {score}</h2>
+        </div>
+        <p className={gameOver || remove ? "remove" : ""}>Score: {score} </p>
+        <div className={gameOver ? "remove" : ""}>
+          <div className={remove ? "remove" : ""}>
+            {displayQuestion} = {correctAnswer !== null ? correctAnswer : ""}
+          </div>
+          <br />
+
+          <ul className={remove ? "remove" : ""}>
+            {allPossibleAnswers.map((answer) => (
+              <li key={answer} style={{ listStyle: "none" }}>
+                <button
+                  disabled={checkAnswer || selectedAnswer === "correct"}
+                  onClick={() => handleAnswerClicked(answer)}
+                  className={
+                    selectedAnswer === answer
+                      ? answer === correctAnswer
+                        ? "correct"
+                        : "incorrect"
+                      : selectedAnswer === "correct" && answer === correctAnswer
+                      ? "correct"
+                      : ""
+                  }
+                >
+                  {answer}
+                </button>
+              </li>
+            ))}
+          </ul>
+        </div>
+
         <button
           onClick={handleButtonClick}
           className={!checkAnswer && !remove && time > 0 ? "remove" : ""}
         >
           {timerText}
         </button>
-        <ul className={remove ? "remove" : ""}>
-          {allPossibleAnswers.map((answer) => (
-            <li key={answer} style={{ listStyle: "none" }}>
-              <button
-                disabled={checkAnswer || selectedAnswer === "correct"}
-                onClick={() => handleAnswerClicked(answer)}
-                className={
-                  selectedAnswer === answer
-                    ? answer === correctAnswer
-                      ? "correct"
-                      : "incorrect"
-                    : selectedAnswer === "correct" && answer === correctAnswer
-                    ? "correct"
-                    : ""
-                }
-              >
-                {answer}
-              </button>
-            </li>
-          ))}
-        </ul>
+        <br />
+        <div
+          className={gameOver || timerText === "Start" ? "remove" : ""}
+        >{`Time left: ${mainClock}`}</div>
       </div>
     </>
   );
