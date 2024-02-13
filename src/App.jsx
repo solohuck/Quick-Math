@@ -286,12 +286,32 @@ function App() {
           </ul>
         </div>
 
-        <button
-          onClick={handleButtonClick}
-          className={!checkAnswer && !remove && time > 0 ? "remove" : ""}
-        >
-          {timerText}
-        </button>
+        <div className="next_btn_div">
+          <button
+            onClick={handleButtonClick}
+            className={
+              (!checkAnswer && !remove && time > 0) ||
+              timerText === "Start" ||
+              timerText === "Restart"
+                ? "remove"
+                : "next_btn"
+            }
+          >
+            {timerText}
+          </button>
+        </div>
+        <div className="start_restart_btn_div">
+          <button
+            onClick={handleButtonClick}
+            className={
+              timerText !== "Start" && timerText !== "Restart"
+                ? "remove"
+                : "start_restart_btn"
+            }
+          >
+            {timerText}
+          </button>
+        </div>
         <br />
         <div
           className={gameOver || timerText === "Start" ? "remove" : ""}

@@ -69,7 +69,7 @@
 }
 
 .answer_button_no_background:hover {
-  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.6);
+  box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.6);
 }
 
 .time_score_div {
@@ -81,4 +81,47 @@
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.next_btn_div {
+  display: flex;
+  justify-content: end;
+}
+
+.next_btn {
+  padding: 0.3rem;
+  width: 4rem;
+  color: white;
+  background-color: grey;
+  border-radius: 3px;
+  border-color: transparent;
+  cursor: pointer;
+  transition-duration: 0.4s;
+}
+
+.next_btn:hover {
+  box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.6);
+}
+
+.start_restart_btn {
+  padding: 0.3rem;
+  width: 4rem;
+  height: 2rem;
+  color: white;
+  background-color: grey;
+  border-radius: 3px;
+  border-color: transparent;
+  cursor: pointer;
+  transition-duration: 0.4s;
+}
+
+.start_restart_btn:hover {
+  box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.6);
+}
+
+.start_restart_btn_div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
 }
