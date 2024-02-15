@@ -1,39 +1,51 @@
+## Quick Math
 
-##Quick Math 
-This is a simple math quiz game built using React. It generates random arithmetic questions and allows the user to select answers. The game includes a timer, scoring system, and feedback for correct and incorrect answers.
+Welcome to Quick Math, a straightforward math quiz game built using React. Test your arithmetic skills by answering random math questions within a limited time frame. This game features various components to enhance your gaming experience, including timers, scoring systems, and feedback for your answers.
 
-##How to Play
-Start the Game: Click the "Start" button to begin the game.
-Answer Questions: Select the correct answer for each displayed question.
-Score: Your score will increase for each correct answer and decrease for each incorrect answer.
-Time Limit: You have a limited time to answer each question. If time runs out, the game will move to the next question automatically.
-Game Over: The game ends when either the time limit is reached or your score reaches zero. You can restart the game by clicking the "Restart" button.
-Features
-Random Questions: Generates random arithmetic questions.
-Scoring System: Score increases for correct answers and decreases for incorrect answers.
-Timer: A timer limits the time available to answer each question.
-Feedback: Provides feedback for correct and incorrect answers.
-Restart: Allows the player to restart the game after completion or when the game is over.
-Components
-App Component: The main component managing game logic and rendering.
-Display Question: Displays the arithmetic question.
-Answer Selection: Provides options for the player to select answers.
-Timer: Displays the remaining time for each question.
-Start/Restart Button: Initiates the game or restarts it after completion or when the game is over.
-Technologies Used
-React: The game is built using React library.
-useState: Manages state variables within the components.
-useEffect: Executes side effects in function components.
-CSS: Styling for the game interface.
-Code Structure
-The code is structured into functional components and utilizes React hooks for managing state and side effects. Key functionalities include generating random questions, calculating scores, managing timers, and providing feedback to the user.
+### How to Play
 
-Getting Started
-To run the game locally:
+1. **Start the Game:** Click the "Start" button to kickstart the game.
+2. **Answer Questions:** Choose the correct answer for each displayed question.
+3. **Scoring:** Your score fluctuates based on the time left on the upper-right question timer.
+4. **Time Limits:** Each question has a 10-second timer displayed in the upper-right corner. Additionally, there's a 60-second session timer shown in the bottom-left corner. The game ends when this session timer runs out, provided your score is above zero.
+5. **Game Over:** The game concludes when either the time limit is reached or your score drops to zero. Click the "Restart" button to start a new game.
 
-Clone this repository to your local machine.
-Navigate to the project directory.
-Run npm install to install dependencies.
-Run npm start to start the development server.
-Open your browser and go to http://localhost:3000 to play the game.
-Enjoy playing the math quiz game! If you have any feedback or suggestions, feel free to contribute or reach out to the developer.
+### Features
+
+- **Random Questions:** Generates random arithmetic questions.
+- **Scoring System:** Scores increase for correct answers and decrease for incorrect ones, based on the question timer.
+- **Question Timer:** Provides 10 seconds to answer each question.
+- **Session Timer:** Limits the time for the entire session to 60 seconds.
+- **Feedback:** Receive feedback for correct, incorrect, and unanswered questions.
+- **Restart:** Allows you to restart the game after completing or when the game ends.
+
+### Components
+
+- **App Component:** Manages game logic and rendering.
+- **Display Question:** Shows the arithmetic question.
+- **Answer Selection:** Offers options to select answers.
+- **Timer:** Displays remaining time for questions and the overall session.
+- **Start/Restart Button:** Initiates or restarts the game.
+
+### Technologies Used
+
+- **React:** Utilized for building the game.
+- **useState:** Manages state variables.
+- **useEffect:** Executes side effects.
+- **CSS:** Styling for the game interface.
+
+### Code Structure
+
+The code is organized into functional components, employing React hooks for state management and effects. The primary functionalities include generating random questions, scoring, managing timers, and providing feedback.
+
+### Getting Started
+
+To play the game:
+
+1. Clone this repository to your local machine.
+2. Navigate to the project directory.
+3. Run `npm install` to install dependencies.
+4. Run `npm start` to launch the development server.
+5. Open your browser and go to `http://localhost:3000` to start playing.
+
+Enjoy playing Quick Math! If you have any feedback or suggestions, feel free to contribute or reach out.
