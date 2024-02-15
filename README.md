@@ -1,8 +1,8 @@
 
-Math Quiz Game
+##Quick Math 
 This is a simple math quiz game built using React. It generates random arithmetic questions and allows the user to select answers. The game includes a timer, scoring system, and feedback for correct and incorrect answers.
 
-How to Play
+##How to Play
 Start the Game: Click the "Start" button to begin the game.
 Answer Questions: Select the correct answer for each displayed question.
 Score: Your score will increase for each correct answer and decrease for each incorrect answer.
