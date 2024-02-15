@@ -1,11 +1,10 @@
 import { useState, useEffect } from "react";
 
 import "./App.css";
-import { Container } from "postcss";
 
 function App() {
   const [selectedAnswer, setSelectedAnswer] = useState();
-  const [mainClock, setMainClock] = useState(10);
+  const [mainClock, setMainClock] = useState(60);
   const [remove, setRemove] = useState(true);
   const [score, setScore] = useState(10);
   const [time, setTime] = useState(null);
@@ -66,7 +65,7 @@ function App() {
     const newIncorrectAnswers = Array.from(newIncorrectAnswersSet);
 
     // if the set is less than 3 then fun the funciton again else set the incorrect answers
-    if (newIncorrectAnswers.length < 3) {
+    if (newIncorrectAnswers.length !== 3) {
       getIncorrectAnswers();
     } else {
       setIncorrectAnswers(newIncorrectAnswers);
@@ -170,7 +169,7 @@ function App() {
 
   const handleButtonClick = () => {
     generateQuestion();
-    setTime(3);
+    setTime(10);
     setRemove(false);
 
     if (score <= 0 || mainClock === 0) {
@@ -203,7 +202,7 @@ function App() {
       setMainClock(0);
     } else if (timerText === "Next") {
       const mainTimer = setInterval(() => {
-        // setMainClock(mainClock - 1);
+        setMainClock(mainClock - 1);
       }, 1000);
 
       return () => clearInterval(mainTimer);
@@ -214,7 +213,6 @@ function App() {
     if (mainClock === 0) {
       setScore(score);
       setGameOver(true);
-      setTime(0);
       setTimerText("Restart");
     }
   }, [gameOver, mainClock]);
@@ -236,7 +234,7 @@ function App() {
 
   return (
     <>
-      <div>
+      <div className="quiz_div">
         <div className={gameOver || remove ? "remove" : "time_score_div"}>
           <p>Score: {score} </p>
           <p>{time}s </p>
@@ -244,16 +242,6 @@ function App() {
 
         <div className={remove || gameOver ? "remove" : "question_div"}>
           {displayQuestion} = ?
-        </div>
-
-        <div>
-          <div className={!gameOver || score > 0 ? "remove" : ""}>
-            <h1>Game Over</h1>
-          </div>
-          <div className={!gameOver || score <= 0 ? "remove" : ""}>
-            <h1>Finished</h1>
-            <h2>score: {score}</h2>
-          </div>
         </div>
 
         <div className={gameOver ? "remove" : ""}>
@@ -286,7 +274,22 @@ function App() {
           </ul>
         </div>
 
-        <div className="next_btn_div">
+        <div
+          className={
+            gameOver || timerText === "Start" ? "remove" : "next_btn_div"
+          }
+        >
+          <div
+            className={
+              gameOver || timerText === "Start"
+                ? "remove"
+                : mainClock < 30 && mainClock > 10
+                ? "session_timer_yellow"
+                : mainClock <= 10
+                ? "session_timer_red"
+                : "session_timer"
+            }
+          >{`${mainClock}`}</div>
           <button
             onClick={handleButtonClick}
             className={
@@ -300,7 +303,15 @@ function App() {
             {timerText}
           </button>
         </div>
+
         <div className="start_restart_btn_div">
+          <div className={!gameOver || score <= 0 ? "remove" : ""}>
+            <h1>Time's Up!</h1>
+            <h2>score: {score}</h2>
+          </div>
+
+          <h1 className={!gameOver || score > 0 ? "remove" : ""}>Game Over </h1>
+
           <button
             onClick={handleButtonClick}
             className={
@@ -312,10 +323,6 @@ function App() {
             {timerText}
           </button>
         </div>
-        <br />
-        <div
-          className={gameOver || timerText === "Start" ? "remove" : ""}
-        >{`Time left: ${mainClock}`}</div>
       </div>
     </>
   );

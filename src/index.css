@@ -1,7 +1,9 @@
-#root {
-  max-width: 1000px;
+body {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   margin: 0px;
-  padding: 0px;
 }
 
 .correct {
@@ -81,11 +83,14 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  margin-bottom: 20px;
 }
 
 .next_btn_div {
   display: flex;
-  justify-content: end;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 50px;
 }
 
 .next_btn {
@@ -99,6 +104,41 @@
   transition-duration: 0.4s;
 }
 
+.session_timer {
+  padding: 0.3rem;
+  width: 4rem;
+  text-align: center;
+  color: white;
+  background-color: green;
+  border-radius: 3px;
+  border-color: transparent;
+  cursor: pointer;
+  transition-duration: 0.4s;
+}
+
+.session_timer_yellow {
+  padding: 0.3rem;
+  width: 4rem;
+  text-align: center;
+  color: grey;
+  background-color: yellow;
+  border-radius: 3px;
+  border-color: transparent;
+  cursor: pointer;
+  transition-duration: 0.4s;
+}
+
+.session_timer_red {
+  padding: 0.3rem;
+  width: 4rem;
+  text-align: center;
+  color: white;
+  background-color: red;
+  border-radius: 3px;
+  border-color: transparent;
+  cursor: pointer;
+  transition-duration: 0.4s;
+}
 .next_btn:hover {
   box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.6);
 }
@@ -121,7 +161,20 @@
 
 .start_restart_btn_div {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  text-align: center;
+}
+
+.quiz_div {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border-radius: 3px;
+  background-color: #3334;
+  padding: 20px;
+  max-width: 700px;
+  width: 90vw;
+  height: 80vh;
 }
