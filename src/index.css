@@ -178,3 +178,35 @@ body {
   width: 90vw;
   height: 80vh;
 }
+
+.leaderboard_div {
+  border: 3px solid blue;
+  height: 20rem;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.leaderboard_top_5 {
+  justify-content: space-between;
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  width: 50%;
+}
+
+.leaderboard_bottom_5 {
+  justify-content: space-between;
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+  padding: 10px;
+}
+
+.leaderboard_user_info {
+  border: 2px solid;
+  padding: 5px;
+  border-radius: 3px;
+  display: flex;
+  list-style: none;
+}
