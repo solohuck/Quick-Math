@@ -1,4 +1,133 @@
-#root {
+@import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap");
+
+* {
   margin: 0px;
   padding: 0px;
+  font-family: "Roboto", sans-serif;
+  font-size: 16px;
+  text-decoration: none;
+  border-width: 0;
+  border-style: none;
+  border-color: transparent;
+}
+
+body {
+  line-height: 1.5;
+}
+
+:root {
+  --light: 300;
+  --medium: 500;
+  --bold: 700;
+  --super-bold: 900;
+  --largest-text: 1.8rem;
+  --large-text: 1.6rem;
+  --medium-text: 1.2rem;
+  --normal-text: 1rem;
+  --small-text: 0.8rem;
+  --smallest-test: 0.6rem;
+  --white: #ffffff;
+  --light-grey: #f6f6f6;
+  --medium-grey: #d3d3d3;
+  --blue: #6992be;
+  --black: #000000;
+  --light-border: 0.11rem solid #d3d3d3;
+}
+
+nav {
+  position: sticky;
+  top: 0px;
+  height: 3.5em;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: var(--blue);
+  padding: 0rem 2rem 0rem 2rem;
+  font-weight: var(--medium);
+  border-bottom: var(--light-border);
+}
+
+.nav__title {
+  color: var(--white);
+}
+
+.btn {
+  padding: 0.4em 1.5em 0.4em 1.5em;
+  border-radius: 0.3rem;
+}
+
+.nav__btn {
+  font-size: 0.8rem;
+  color: var(--black);
+  background-color: var(--light-grey);
+}
+
+main {
+  height: 100vh;
+  width: 100vw;
+  background-color: var(--lightest-color);
+}
+
+.section {
+  margin: 2rem;
+  width: min(900px, 100% -3rem);
+}
+
+.hero-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  margin-top: 3rem;
+}
+
+.hero__title {
+  font-weight: var(--bold);
+  font-size: 1.8rem;
+  color: var(--black);
+}
+
+.hero__btn {
+  font-weight: var(--bold);
+  font-size: 1rem;
+  color: white;
+  background-color: var(--blue);
+}
+
+table {
+  width: 100%;
+  border-spacing: 0;
+  border-collapse: separate;
+  background-color: var(--white);
+  border-radius: 0.3rem;
+  overflow: hidden;
+  border: var(--light-border);
+}
+
+th,
+td {
+  padding: 0.5rem;
+  text-align: left;
+}
+
+td {
+  border-top: var(--light-border);
+  color: var(--black);
+}
+
+th {
+  background: var(--blue);
+  color: var(--black);
+}
+
+section {
+  height: calc(100vh - 3.5em);
+  width: 100%;
+}
+
+.time_score_div {
+  border: 2px solid red;
+  justify-content: space-between;
+  display: flex;
+  margin: 2rem;
 }
