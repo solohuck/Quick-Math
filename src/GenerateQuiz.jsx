@@ -42,13 +42,13 @@ function GenerateQuiz() {
     if (isQuestionValid) {
       const newQuestion = {
         answersArray: shuffledArray,
-        question: `${num1} ${operation} ${num2}`,
+        question: `${num1} ${operation} ${num2} = ?`,
       };
 
       setQuestions([newQuestion]);
       setCorrectAnswer(answer);
       setSelectedAnswer(false);
-      setSeconds(10);
+      setSeconds(2000);
       setIsButtonDisabled(false);
     } else {
       handleClick();
@@ -101,65 +101,34 @@ function GenerateQuiz() {
 
   return (
     <section>
-      <div className="time_score_div">
-        <div className={score === "Score" ? "remove" : "show_score"}>
-          {score}
+      <div className="container full-view-height">
+        <div className="space-between">
+          <p>{score}</p>
+          <p>{seconds}</p>
         </div>
-        <div
-          className={
-            seconds === "Timer"
-              ? "remove"
-              : seconds >= 7
-              ? "session_timer_green"
-              : seconds < 7 && seconds >= 4
-              ? "session_timer_yellow"
-              : seconds <= 3 && seconds > 0
-              ? "session_timer_red"
-              : seconds === "Timer" || seconds === 0
-              ? "session_timer"
-              : seconds === "Perfect!"
-              ? "session_timer_gold"
-              : ""
-          }
-        >
-          {seconds}
-        </div>
-      </div>
 
-      {questions.map((question, index) => (
-        <div key={index}>
-          <div className="question_div">{question.question}</div>
-          <ul className="answer_div">
+        {questions.map((question, index) => (
+          <div key={index} className="text-align-center display-grid">
+            <h3>{question.question}</h3>
+
             {question.answersArray.map((answer, index) => (
-              <li key={index} className="answer_list">
-                <button
-                  onClick={() => handleAnsweredClick(answer)}
-                  disabled={isButtonDisabled}
-                  className={
-                    answer === selectedAnswer
-                      ? selectedAnswer === correctAnswer
-                        ? "correct"
-                        : "incorrect"
-                      : "button"
-                  }
-                >
-                  {answer}
-                </button>
-              </li>
+              <button
+                key={index}
+                className="button button--mw"
+                onClick={() => handleAnsweredClick(answer)}
+              >
+                {answer}
+              </button>
             ))}
-          </ul>
-        </div>
-      ))}
-      <div className="next_btn_div">
-        <button
-          onClick={handleClick}
-          className={score !== "Score" ? "remove" : "next_btn"}
-        >
+          </div>
+        ))}
+
+        <button onClick={handleClick} className="button visually-hidden">
           Start
         </button>
-        <div className={score === "Score" ? "remove" : "rounds_completed_div"}>
-          <div className="rounds">Round: {roundsCompleted}</div>
-          <div className="streak">Streak: {streak}</div>
+        <div className="space-between">
+          <p>Round: {roundsCompleted}</p>
+          <p>Streak: {streak}</p>
         </div>
       </div>
     </section>
