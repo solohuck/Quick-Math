@@ -7,8 +7,10 @@ import { countdownTimer } from "./countdownTimer";
 import { scoreSystem } from "./scoreSystem";
 import { questionValidator } from "./questionValidator";
 
+
 function GenerateQuiz() {
   const navigate = useNavigate();
+  const [previousAnswer, setPreviousAnswer] = useState();
   const [questions, setQuestions] = useState([]);
   const [selectedAnswer, setSelectedAnswer] = useState(false);
   const [correctAnswer, setCorrectAnswer] = useState(null);
@@ -40,15 +42,18 @@ function GenerateQuiz() {
     );
 
     if (isQuestionValid) {
-      const newQuestion = {
+      let newQuestion = {
+        num1,
+        operation,
+        num2,
         answersArray: shuffledArray,
-        question: `${num1} ${operation} ${num2} = ?`,
+        correctAnswer: answer,
       };
 
       setQuestions([newQuestion]);
       setCorrectAnswer(answer);
       setSelectedAnswer(false);
-      setSeconds(2000);
+      setSeconds(10);
       setIsButtonDisabled(false);
     } else {
       handleClick();
@@ -66,18 +71,29 @@ function GenerateQuiz() {
   };
 
   const handleAnsweredClick = (answer) => {
+    // Update the score based on the answer and correct answer
     updateScore(answer, correctAnswer, seconds);
-    setSelectedAnswer(answer);
+
+    setSelectedAnswer(answer); // Set the actual answer
 
     if (answer === correctAnswer) {
       if (seconds === 10) {
         setSeconds("Perfect!");
       }
+
       clearInterval(timer);
       setIsButtonDisabled(true);
+      // Move to the next question after a delay
       setTimeout(handleClick, 1000);
     }
   };
+
+  useEffect(() => {
+    setPreviousAnswer("?");
+    if (selectedAnswer !== false) {
+      setPreviousAnswer(selectedAnswer);
+    }
+  }, [selectedAnswer]);
 
   useEffect(() => {
     if (seconds <= 0) {
@@ -101,20 +117,58 @@ function GenerateQuiz() {
 
   return (
     <section>
-      <div className="container full-view-height">
-        <div className="space-between">
-          <p>{score}</p>
-          <p>{seconds}</p>
+      <div
+        className={
+          seconds === "Timer"
+            ? "container full-view-height wrapper center--button"
+            : "container full-view-height wrapper padding-block-600"
+        }
+      >
+        <div className="timer">
+          <div
+            className={seconds === "Timer" ? "visually-hidden" : "timer-bar"}
+            style={{ width: `${(seconds / 10) * 100}%` }}
+          ></div>
+        </div>
+        <div className={seconds === "Timer" ? "visually-hidden" : "info"}>
+          <div className="score">{score}</div>
+          <div className="score middle">{roundsCompleted}</div>
+          <div className="score last">{streak}</div>
         </div>
 
+        <button
+          onClick={handleClick}
+          className={
+            seconds !== "Timer" ? "visually-hidden" : "button button--center"
+          }
+        >
+          Start
+        </button>
+
         {questions.map((question, index) => (
-          <div key={index} className="text-align-center display-grid">
-            <h3>{question.question}</h3>
+          <div
+            key={index}
+            className="text-align-center display-grid grid-wrapper"
+          >
+            <h2
+              className={
+                selectedAnswer === correctAnswer
+                  ? "right-answer fs-secondary-heading padding-block-700"
+                  : selectedAnswer !== correctAnswer &&
+                    selectedAnswer !== false &&
+                    selectedAnswer === previousAnswer
+                  ? "wrong-answer fs-secondary-heading padding-block-700"
+                  : " fs-secondary-heading padding-block-700"
+              }
+            >
+              {question.num1} {question.operation} {question.num2} ={" "}
+              {previousAnswer || "?"}
+            </h2>
 
             {question.answersArray.map((answer, index) => (
               <button
                 key={index}
-                className="button button--mw"
+                className={"button button--thicc"}
                 onClick={() => handleAnsweredClick(answer)}
               >
                 {answer}
@@ -122,15 +176,15 @@ function GenerateQuiz() {
             ))}
           </div>
         ))}
-
-        <button onClick={handleClick} className="button visually-hidden">
-          Start
-        </button>
-        <div className="space-between">
-          <p>Round: {roundsCompleted}</p>
-          <p>Streak: {streak}</p>
-        </div>
       </div>
+      {/* <button
+        onClick={handleClick}
+        className={
+          seconds !== "Timer" ? "button button--center" : "visually-hidden"
+        }
+      >
+        Start
+      </button> */}
     </section>
   );
 }

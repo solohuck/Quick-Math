@@ -13,14 +13,14 @@ function MainMenu() {
             <nav className="primary-navigation" id="primary-navigation">
               <ul aria-label="Primary" role="list" className="nav-list">
                 <Link to="/Scoreboard" className="nav-list-link">
-                  Scoreboard
+                  Leaderboard
                 </Link>
 
                 <a href="#rules" className="nav-list-link">
                   Rules
                 </a>
 
-                <Link to="/Account" className="nav-list-link">
+                <Link to="/UserLogIn" className="nav-list-link">
                   Log In
                 </Link>
 
@@ -34,7 +34,7 @@ function MainMenu() {
       </header>
 
       <main>
-        <section class="padding-block-900">
+        <section className="padding-block-900">
           <div className="container text-align-center">
             <div className="even-columns ">
               <div className="flow extra-padding">
