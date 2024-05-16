@@ -32,6 +32,7 @@ body {
   color: white;
   text-align: left;
   border-radius: 3px;
+  border-color: transparent;
 }
 
 .remove {
@@ -44,9 +45,16 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: start;
-
   padding-left: 0px;
   gap: 5px;
+}
+
+.button {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  border-radius: 3px;
 }
 
 .answer_list {
@@ -55,7 +63,6 @@ body {
   align-items: center;
   width: 100%;
   list-style: none;
-  background-color: grey;
   border-radius: 3px;
 }
 
@@ -88,7 +95,7 @@ body {
 
 .next_btn_div {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   margin-top: 50px;
 }
@@ -96,6 +103,17 @@ body {
 .next_btn {
   padding: 0.3rem;
   width: 4rem;
+  color: black;
+  border-radius: 3px;
+  background-color: white;
+  cursor: pointer;
+  transition-duration: 0.4s;
+}
+
+.show_score {
+  padding: 0.3rem;
+  width: 4rem;
+  text-align: center;
   color: white;
   background-color: grey;
   border-radius: 3px;
@@ -105,6 +123,29 @@ body {
 }
 
 .session_timer {
+  padding: 0.3rem;
+  width: 4rem;
+  text-align: center;
+  color: white;
+  background-color: grey;
+  border-radius: 3px;
+  border-color: transparent;
+  cursor: pointer;
+  transition-duration: 0.4s;
+}
+.session_timer_gold {
+  padding: 0.3rem;
+  width: 4rem;
+  text-align: center;
+  color: white;
+  background-color: gold;
+  border-radius: 3px;
+  border-color: transparent;
+  cursor: pointer;
+  transition-duration: 0.4s;
+}
+
+.session_timer_green {
   padding: 0.3rem;
   width: 4rem;
   text-align: center;
@@ -139,24 +180,15 @@ body {
   cursor: pointer;
   transition-duration: 0.4s;
 }
-.next_btn:hover {
-  box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.6);
-}
 
 .start_restart_btn {
   padding: 0.3rem;
   width: 4rem;
   height: 2rem;
   color: white;
-  background-color: grey;
   border-radius: 3px;
-  border-color: transparent;
   cursor: pointer;
   transition-duration: 0.4s;
-}
-
-.start_restart_btn:hover {
-  box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.6);
 }
 
 .start_restart_btn_div {
@@ -172,41 +204,28 @@ body {
   flex-direction: column;
   justify-content: center;
   border-radius: 3px;
-  background-color: #3334;
   padding: 20px;
   max-width: 700px;
   width: 90vw;
   height: 80vh;
 }
 
-.leaderboard_div {
-  border: 3px solid blue;
-  height: 20rem;
+.rounds_completed_div {
+  display: flex;
+  color: black;
+  padding: 0.2rem;
   width: 100%;
-  display: flex;
   justify-content: space-between;
 }
 
-.leaderboard_top_5 {
-  justify-content: space-between;
-  display: flex;
-  flex-direction: column;
-  padding: 10px;
-  width: 50%;
+.rounds {
+  padding: 0.2rem;
+  border-radius: 0.2rem;
+  margin: 0.2rem;
 }
 
-.leaderboard_bottom_5 {
-  justify-content: space-between;
-  display: flex;
-  flex-direction: column;
-  width: 50%;
-  padding: 10px;
-}
-
-.leaderboard_user_info {
-  border: 2px solid;
-  padding: 5px;
-  border-radius: 3px;
-  display: flex;
-  list-style: none;
+.streak {
+  padding: 0.2rem;
+  border-radius: 0.2rem;
+  margin: 0.2rem;
 }
