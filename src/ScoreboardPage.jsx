@@ -1,26 +1,66 @@
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import axios from "axios";
 import "./styles/leaderboard.css";
+import { Navbar } from "./Navbar";
 
 function ScoreboardPage() {
+  const [leaderboard, setLeaderboard] = useState([]);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    const fectchLeaderboard = async () => {
+      try {
+        const res = await axios.get("/api/leaderboard");
+        console.log("fetched scores:", res.data);
+        setLeaderboard(res.data);
+      } catch (error) {
+        console.error("Error fetching leaderboard:", error);
+        setError("Error fetching leaderboard");
+      }
+    };
+
+    fectchLeaderboard();
+  }, []);
+
+  if (error) {
+    return <alert>{error}</alert>;
+  }
   return (
     <>
       <section>
-        <nav>
-          <Link to="/" className="nav__title">
-            Quick Math
-          </Link>
-          <button className="nav__btn btn">Log out</button>
-        </nav>
+        <Navbar />
 
         <div className="container">
-          <div className="hero-wrapper">
-            <p className="hero__title">Leaderboard</p>
-            <Link to="/GenerateQuiz" className="hero__btn btn">
-              Back to quiz
-            </Link>
-          </div>
-
+          <h2>Leaderboard</h2>
           <table>
+            <thead>
+              <tr>
+                <th>Rank</th>
+                <th>Name</th>
+                <th>Total Score</th>
+                <th>Rounds</th>
+                <th>Streak</th>
+                <th>Perfects</th>
+              </tr>
+            </thead>
+            <tbody>
+              {leaderboard.map((user, index) => {
+                return (
+                  <tr key={user._id}>
+                    <td>{index + 1}</td>
+                    <td>{user.username}</td>
+                    <td>{user.highScore.total}</td>
+                    <td>{user.highScore.rounds}</td>
+                    <td>{user.highScore.streak}</td>
+                    <td>{user.highScore.perfects}</td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+
+          {/* <table>
             <tr>
               <th>#</th>
               <th>Name</th>
@@ -58,7 +98,7 @@ function ScoreboardPage() {
               <td data-cell="perfects">2</td>
               <td data-cell="score">4300</td>
             </tr>
-          </table>
+          </table> */}
         </div>
       </section>
     </>

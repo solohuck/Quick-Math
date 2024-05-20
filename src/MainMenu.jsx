@@ -27,6 +27,9 @@ function MainMenu() {
                 <Link to="/GenerateQuiz" className="nav-list-link">
                   Play
                 </Link>
+                <Link to="/UserAccount" className="nav-list-link">
+                  Account
+                </Link>
               </ul>
             </nav>
           </div>
