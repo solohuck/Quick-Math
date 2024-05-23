@@ -5,19 +5,52 @@ import axios from "axios";
 function GameOver() {
   const location = useLocation();
   const navigate = useNavigate();
+  const [noUserFound, setNoUserFound] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [scoreDetails, setScoreDetails] = useState(
     location.state || JSON.parse(localStorage.getItem("scoreDetails")) || {}
   );
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [submitted, setSubmitted] = useState(false);
+  const [token] = useState(localStorage.getItem("authToken"));
 
   const { roundsCompleted, streak, perfects } = scoreDetails;
 
   const finalScore =
     (roundsCompleted || 0) * 50 + (streak || 0) * 100 + (perfects || 0) * 500;
 
-  const handleSubmitScore = async (token) => {
+  useEffect(() => {
+    const checkForUser = async () => {
+      if (token) {
+        console.log("user is logged in");
+        handleSubmitScore();
+      } else {
+        setNoUserFound(true);
+        setErrorMessage("Click here to login/signup and save your score");
+
+        localStorage.setItem(
+          "scoreDetails",
+          JSON.stringify({ roundsCompleted, streak, perfects, finalScore }),
+          console.log("Score saved to local storage")
+        );
+        // launch code for not being logged in
+      }
+    };
+
+    checkForUser();
+  }, []);
+
+  const handleNoUserFound = async () => {
+    try {
+      navigate(
+        "/UserLogIn",
+        { state: { from: location } },
+        console.log("redirecting to login page")
+      );
+    } catch (error) {
+      console.error("Error redirecting to login page");
+    }
+  };
+
+  const handleSubmitScore = async () => {
     try {
       const res = await axios.post(
         "/api/score",
@@ -31,56 +64,15 @@ function GameOver() {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
-      console.log(res.data.message);
-      setSubmitted(true);
+
       localStorage.removeItem("scoreDetails");
-      setErrorMessage(`Score submitted successfully!`);
+      console.log(res.data.message);
+      setErrorMessage(res.data.message);
     } catch (error) {
       console.error("Error submitting score:", error);
-      setErrorMessage("Failed to submit score. Please try again.");
+      setErrorMessage("Session expired. Please log in again.");
     }
   };
-
-  useEffect(() => {
-    const getUserNameAndSubmitScore = async () => {
-      try {
-        const token = localStorage.getItem("authToken");
-        if (token) {
-          const res = await axios.get("/api/user", {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          });
-          setIsLoggedIn(true);
-          if (!submitted) {
-            await handleSubmitScore(token);
-            console.log(`Currently logged in as ${res.data.username}`);
-          }
-        } else {
-          setIsLoggedIn(false);
-          setErrorMessage("You must be logged in to save your score.");
-          localStorage.setItem(
-            "scoreDetails",
-            JSON.stringify({ roundsCompleted, streak, perfects, finalScore })
-          );
-          navigate("/UserLogIn", { state: { from: location } });
-        }
-      } catch (error) {
-        console.error("Please login", error);
-        setErrorMessage("Error fetching user data. Please login.");
-      }
-    };
-
-    getUserNameAndSubmitScore();
-  }, [
-    submitted,
-    roundsCompleted,
-    streak,
-    perfects,
-    finalScore,
-    location,
-    navigate,
-  ]);
 
   return (
     <section>
@@ -99,6 +91,7 @@ function GameOver() {
             <p
               className="error-message text-align-center "
               style={{ color: "red" }}
+              onClick={noUserFound ? handleNoUserFound : null}
             >
               {errorMessage}
             </p>

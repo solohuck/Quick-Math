@@ -21,16 +21,19 @@ export function scoreSystem() {
         currentLongStreak =
           streak > 1 && streak > longestStreak ? streak : longestStreak;
 
-        if (currentStreak === 5) {
-          currentScore += 3;
-        } else if (streak >= 8) {
-          currentScore += 5;
-        } else if (streak >= 10) {
-          currentScore += 8;
-        } else if (streak >= 15) {
-          currentScore += 10;
+        if (currentScore <= 100) {
+          if (currentStreak === 5) {
+            currentScore += 3;
+          } else if (streak >= 8) {
+            currentScore += 5;
+          } else if (streak >= 10) {
+            currentScore += 8;
+          } else if (streak >= 15) {
+            currentScore += 10;
+          } else if (streak >= 20) {
+            currentScore += 15;
+          }
         }
-
         if (timeLeft === 10) {
           currentScore += 10;
           currentPerfects += 1;

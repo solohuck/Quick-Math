@@ -31,7 +31,6 @@ function UserLogIn() {
 
   const enableRegister = () => {
     setIsRegister(true);
-    setIslogin(false);
   };
 
   const cancelRegister = () => {
@@ -40,16 +39,18 @@ function UserLogIn() {
 
   const handleLogin = async (e) => {
     e.preventDefault();
+
     try {
       const response = await axios.post("/api/login", { username, password });
-      console.log("Login successful:", response.data);
-      localStorage.setItem("authToken", response.data.token); // store the token
+      localStorage.setItem("authToken", response.data.accessToken); // store the token
       setErrorMessage("Login successful");
+
       if (from) {
         navigate(from);
       } else {
         navigate("/UserAccount");
       }
+      
     } catch (error) {
       console.error("Error logging in:", error);
       setErrorMessage("Login failed. Please try again.");
