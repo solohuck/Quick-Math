@@ -1,3 +1,5 @@
+const fs = require("fs");
+const https = require("https");
 const express = require("express");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
@@ -7,10 +9,6 @@ require("dotenv").config();
 
 const app = express();
 const PORT = process.env.PORT || 5000;
-console.log(process.env.ACCESS_TOKEN_SECRET);
-
-// MIDDLEWARE
-app.use(bodyParser.json());
 
 const ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET;
 const REFRESH_TOKEN_SECRET = process.env.REFRESH_TOKEN_SECRET;
@@ -20,7 +18,7 @@ const generateAcessToken = (user) => {
   return jwt.sign(
     { id: user._id, username: user.username },
     ACCESS_TOKEN_SECRET,
-    { expiresIn: "15m" }
+    { expiresIn: "5m" }
   );
 };
 
@@ -73,6 +71,9 @@ const userSchema = new mongoose.Schema({
       },
     },
   ],
+  currentRank: {
+    type: Number,
+  },
   highScore: {
     total: {
       type: Number,
@@ -99,6 +100,9 @@ const userSchema = new mongoose.Schema({
 // CREATE USER MODEL
 const User = mongoose.model("User", userSchema);
 
+// MIDDLEWARE
+app.use(bodyParser.json());
+
 // TOKEN AUTHENTICATION MIDDLEWARE**
 // - Extracts the token from the 'authorization' header
 // - Verifies token using secret
@@ -110,6 +114,14 @@ const authenticateToken = (req, res, next) => {
   if (!token) {
     return res.status(401).json({ error: "Access denied. No token provided" });
   }
+
+  jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
+    if (err) {
+      return res
+        .status(403)
+        .json({ error: "Token is not valid. Please login again" });
+    }
+  });
   try {
     const decoded = jwt.verify(token, ACCESS_TOKEN_SECRET);
     console.log("Decoded token:", decoded);
@@ -126,28 +138,35 @@ const authenticateToken = (req, res, next) => {
 app.get("/api/user", authenticateToken, async (req, res) => {
   try {
     const user = await User.findById(req.user.id);
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
     res.json(user);
   } catch (error) {
+    console.error("Error fetching user data:", Error);
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
 
 // TOKEN REFRESH ENDPOINT
 app.post("/api/token", async (req, res) => {
-  const { token } = req.body;
-  if (!token) return res.status(401).json({ error: "No token provided" });
+  const { refreshToken } = req.body;
+  console.log("Refresh token received:", refreshToken);
+
+  if (!refreshToken)
+    return res.status(401).json({ error: "No token provided" });
 
   try {
-    const user = await User.findOne({ refreshToken: token });
+    const user = await User.findOne({ refreshToken });
     if (!user) return res.status(403).json({ error: "Invalid refresh token" });
 
-    jwt.verify(token, REFRESH_TOKEN_SECRET, (err, decoded) => {
+    jwt.verify(refreshToken, REFRESH_TOKEN_SECRET, (err, decoded) => {
       if (err) {
         console.error("Error verifying refresh token:", err);
         return res.status(403).json({ error: "Invalid refresh token" });
       }
 
-      const accessToken = generateAcessToken(user);
+      const accessToken = generateAcessToken({ username: user.username });
       return res.json({ accessToken });
     });
   } catch (error) {
@@ -182,31 +201,41 @@ app.post("/api/score", authenticateToken, async (req, res) => {
   ) {
     return res.status(400).json({ error: "All scores must be a number" });
   }
+
   try {
     const user = await User.findById(req.user.id);
     if (!user) {
       return res.status(404).json({ error: "User not found" });
     }
 
+    const previousRank = user.currentRank;
+
     if (total > user.highScore.total) {
       user.newScore.push({ total, rounds, streak, perfects });
       user.highScore = { total, rounds, streak, perfects };
       await user.save();
 
+      // calc the new rank for the user based on the new highscore
       const pipeline = [
         { $match: { "highScore.total": { $gt: total } } },
         { $group: { _id: null, rank: { $sum: 1 } } },
       ];
 
-      const rankResult = await User.aggregate(pipeline);
-      const userRank = rankResult.length > 0 ? rankResult[0].rank + 1 : 1;
+      const calculateRank = await User.aggregate(pipeline);
+      const newRank = calculateRank.length > 0 ? calculateRank[0].rank + 1 : 1;
+
+      // update currentRank if rank cahnges
+      if (newRank !== previousRank) {
+        user.currentRank = newRank;
+        await user.save();
+      }
 
       res.status(200).json({
-        message: `New High Score! Current rank: ${userRank}`,
+        message: `New High Score! New rank: ${newRank}`,
       });
     } else {
       return res.status(200).json({
-        message: `Try again! Your current high score is ${user.highScore.total}`,
+        message: `Current high score: ${user.highScore.total} & current rank: ${user.currentRank}`,
       });
     }
   } catch (error) {
@@ -267,9 +296,16 @@ app.post("/api/login", async (req, res) => {
     user.refreshToken = refreshToken;
     await user.save();
 
-    res
-      .status(200)
-      .json({ message: "Login successful", refreshToken, accessToken });
+    console.log("Setting refresh token cookie:", refreshToken);
+
+    res.cookie("refreshToken", refreshToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production", // Ensure this is only true in production
+      sameSite: "Strict",
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+    });
+
+    res.status(200).json({ message: "Login successful", accessToken });
   } catch (error) {
     console.error("Error logging in:", error);
     res.status(500).json({ error: "Internal Server Error" });
@@ -278,21 +314,35 @@ app.post("/api/login", async (req, res) => {
 
 // LOGOUT ENDPOINT
 app.post("/api/logout", async (req, res) => {
-  const { token } = req.body;
   try {
-    const user = await User.findOneAndUpdate(
-      { refreshToken: token },
-      { refreshToken: null }
-    );
-    !user ? res.status(403).json({ error: "Invalid refresh token" }) : "";
-    res.status(204).send();
+    const user = await User.findById(req.user.id);
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    // Remove the refreshToken
+    user.refreshToken = "";
+    await user.save();
+
+    // Clear the refresh token cookie
+    res.clearCookie("refreshToken", {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "Strict",
+    });
+    res.status(200).json({ message: "Logged out successfully" });
   } catch (error) {
     console.error("Error logging out:", error);
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
 
-// Start the server
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+// START THE HTTPS SERVER
+const options = {
+  key: fs.readFileSync("./localhost-key.pem"),
+  cert: fs.readFileSync("./localhost.pem"),
+};
+
+https.createServer(options, app).listen(PORT, () => {
+  console.log(`Server is running on https://localhost:${PORT}`);
 });

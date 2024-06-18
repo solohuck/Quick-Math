@@ -1,4 +1,4 @@
-export function getIncorrectAnswers(correctAnswer) {
+export function getChoices(correctAnswer) {
   const addOrSubArray = ["+", "-"];
   const newIncorrectAnswersSet = new Set();
 

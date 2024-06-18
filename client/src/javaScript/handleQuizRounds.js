@@ -1,5 +1,4 @@
-export function quizLogic() {
-  
+export function handleQuizRounds() {
   useEffect(() => {
     if (score <= 0) {
       setScore(0);

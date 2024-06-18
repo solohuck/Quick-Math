@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate, useLocation } from "react-router-dom";
 
-function UserLogIn() {
+function LoginRegister() {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -41,8 +41,10 @@ function UserLogIn() {
     e.preventDefault();
 
     try {
-      const response = await axios.post("/api/login", { username, password });
-      localStorage.setItem("authToken", response.data.accessToken); // store the token
+      const res = await axios.post("/api/login", { username, password });
+      const { accessToken } = res.data; // Extract access token from response
+
+      sessionStorage.setItem("authToken", accessToken); // store the token
       setErrorMessage("Login successful");
 
       if (from) {
@@ -50,7 +52,6 @@ function UserLogIn() {
       } else {
         navigate("/UserAccount");
       }
-      
     } catch (error) {
       console.error("Error logging in:", error);
       setErrorMessage("Login failed. Please try again.");
@@ -105,4 +106,4 @@ function UserLogIn() {
   );
 }
 
-export default UserLogIn;
+export default LoginRegister;

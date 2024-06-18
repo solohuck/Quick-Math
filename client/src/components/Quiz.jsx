@@ -1,19 +1,19 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { getAnswer } from "./getAnswer";
-import { getIncorrectAnswers } from "./getIncorrectAnswers";
-import { shuffleAllAnswers } from "./shuffleAllAnswers";
-import { countdownTimer } from "./countdownTimer";
-import { scoreSystem } from "./scoreSystem";
-import { questionValidator } from "./questionValidator";
+import { getAnswer } from "../javaScript/getAnswer";
+import { getChoices } from "../javaScript/getChoices";
+import { shuffleAnswers } from "../javaScript/shuffleAnswers";
+import { countdownTimer } from "../javaScript/countdownTimer";
+import { scoreSystem } from "../javaScript/scoreSystem";
+import { questionValidator } from "../javaScript/questionValidator";
 
-
-function GenerateQuiz() {
+function Quiz() {
   const navigate = useNavigate();
   const [previousAnswer, setPreviousAnswer] = useState();
   const [questions, setQuestions] = useState([]);
   const [selectedAnswer, setSelectedAnswer] = useState(false);
   const [correctAnswer, setCorrectAnswer] = useState(null);
+  const [disableButton, setDisableButton] = useState(false);
   const [seconds, setSeconds, timer] = countdownTimer("Timer");
   const [
     score,
@@ -32,8 +32,8 @@ function GenerateQuiz() {
     }
 
     const [num1, operation, num2, answer] = getAnswer();
-    const incorrectAnswersArray = getIncorrectAnswers(answer);
-    const shuffledArray = shuffleAllAnswers([answer, ...incorrectAnswersArray]);
+    const incorrectAnswersArray = getChoices(answer);
+    const shuffledArray = shuffleAnswers([answer, ...incorrectAnswersArray]);
     const isQuestionValid = questionValidator(
       num1,
       num2,
@@ -168,6 +168,7 @@ function GenerateQuiz() {
             {question.answersArray.map((answer, index) => (
               <button
                 key={index}
+                disabled={isButtonDisabled}
                 className={"button button--thicc"}
                 onClick={() => handleAnsweredClick(answer)}
               >
@@ -189,4 +190,4 @@ function GenerateQuiz() {
   );
 }
 
-export default GenerateQuiz;
+export default Quiz;

@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
-import "./styles/leaderboard.css";
-import { Navbar } from "./Navbar";
+import { NavbarDesktop } from "./NavbarDesktop";
 
 function ScoreboardPage() {
   const [leaderboard, setLeaderboard] = useState([]);
@@ -28,9 +27,17 @@ function ScoreboardPage() {
   }
   return (
     <>
+      <header className="primary-header ">
+        <div className="container">
+          <div className="nav-wrapper">
+            <Link to="/" alt="Quick Math" className="nav-logo">
+              Quick Math
+            </Link>
+            <NavbarDesktop />
+          </div>
+        </div>
+      </header>
       <section>
-        <Navbar />
-
         <div className="container">
           <h2>Leaderboard</h2>
           <table>

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useLocation, Link, useNavigate } from "react-router-dom";
+import { getValidAuthToken } from "../javaScript/auth";
 import axios from "axios";
 
 function GameOver() {
@@ -8,9 +9,9 @@ function GameOver() {
   const [noUserFound, setNoUserFound] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [scoreDetails, setScoreDetails] = useState(
-    location.state || JSON.parse(localStorage.getItem("scoreDetails")) || {}
+    location.state || JSON.parse(sessionStorage.getItem("scoreDetails")) || {}
   );
-  const [token] = useState(localStorage.getItem("authToken"));
+  const [authToken] = useState(sessionStorage.getItem("authToken"));
 
   const { roundsCompleted, streak, perfects } = scoreDetails;
 
@@ -19,18 +20,17 @@ function GameOver() {
 
   useEffect(() => {
     const checkForUser = async () => {
-      if (token) {
-        console.log("user is logged in");
+      if (authToken) {
         handleSubmitScore();
       } else {
-        setNoUserFound(true);
-        setErrorMessage("Click here to login/signup and save your score");
-
-        localStorage.setItem(
-          "scoreDetails",
-          JSON.stringify({ roundsCompleted, streak, perfects, finalScore }),
-          console.log("Score saved to local storage")
-        );
+        getValidAuthToken();
+        // setNoUserFound(true);
+        // setErrorMessage("Click here to login/signup and save your score");
+        // sessionStorage.setItem(
+        //   "scoreDetails",
+        //   JSON.stringify({ roundsCompleted, streak, perfects, finalScore }),
+        //   console.log("Score saved to session storage")
+        // );
         // launch code for not being logged in
       }
     };
@@ -61,11 +61,11 @@ function GameOver() {
           perfects: perfects,
         },
         {
-          headers: { Authorization: `Bearer ${token}` },
+          headers: { Authorization: `Bearer ${authToken}` },
         }
       );
 
-      localStorage.removeItem("scoreDetails");
+      sessionStorage.removeItem("scoreDetails");
       console.log(res.data.message);
       setErrorMessage(res.data.message);
     } catch (error) {
@@ -101,9 +101,6 @@ function GameOver() {
         <div className="game-over-links">
           <Link to="/GenerateQuiz" className="button ">
             Try Again
-          </Link>
-          <Link to="/Scoreboard" className="button">
-            Leaderboard
           </Link>
           <Link to="/" className="button">
             Main Menu

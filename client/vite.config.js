@@ -4,9 +4,13 @@ import react from "@vitejs/plugin-react-swc";
 export default defineConfig({
   plugins: [react()],
   server: {
+    https: {
+      key: "../server/localhost-key.pem",
+      cert: "../server/localhost.pem",
+    },
     proxy: {
       "/api": {
-        target: "http://localhost:5000",
+        target: "https://localhost:5000",
         changeOrigin: true,
         secure: false,
         configure: (proxy, options) => {
