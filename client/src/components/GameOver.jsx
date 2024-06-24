@@ -24,13 +24,13 @@ function GameOver() {
         handleSubmitScore();
       } else {
         getValidAuthToken();
-        // setNoUserFound(true);
-        // setErrorMessage("Click here to login/signup and save your score");
-        // sessionStorage.setItem(
-        //   "scoreDetails",
-        //   JSON.stringify({ roundsCompleted, streak, perfects, finalScore }),
-        //   console.log("Score saved to session storage")
-        // );
+        setNoUserFound(true);
+        setErrorMessage("Click here to login/signup and save your score");
+        sessionStorage.setItem(
+          "scoreDetails",
+          JSON.stringify({ roundsCompleted, streak, perfects, finalScore }),
+          console.log("Score saved to session storage")
+        );
         // launch code for not being logged in
       }
     };
@@ -41,7 +41,7 @@ function GameOver() {
   const handleNoUserFound = async () => {
     try {
       navigate(
-        "/UserLogIn",
+        "/LoginRegister",
         { state: { from: location } },
         console.log("redirecting to login page")
       );
@@ -99,11 +99,11 @@ function GameOver() {
         </div>
 
         <div className="game-over-links">
-          <Link to="/GenerateQuiz" className="button ">
+          <Link to="/Quiz" className="button button-fixed-width">
             Try Again
           </Link>
-          <Link to="/" className="button">
-            Main Menu
+          <Link to="/" className="button button-fixed-width">
+            Quit
           </Link>
         </div>
       </div>

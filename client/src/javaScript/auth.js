@@ -55,7 +55,7 @@ export async function getValidAuthToken() {
   if (!authToken || isTokenExpired(authToken)) {
     authToken = await refreshAuthToken();
   } else {
-    console.log(`Token found: ${authToken} `);
+    console.log(`Token found @ auth.js: ${authToken} `);
   }
 
   return authToken;

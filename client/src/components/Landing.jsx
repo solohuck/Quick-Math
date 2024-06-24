@@ -30,7 +30,7 @@ function Landing() {
                 </p>
 
                 <button className="remove-button-border">
-                  <Link to="/GenerateQuiz" className="button">
+                  <Link to="/Quiz" className="button">
                     Start Practicing
                   </Link>
                 </button>
