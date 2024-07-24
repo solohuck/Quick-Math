@@ -1,0 +1,579 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap");
+
+:root {
+  --clr-text: hsl(240, 20%, 2%);
+  --clr-primary: hsl(229, 44%, 54%);
+  --clr-accent: hsl(229, 68%, 61%);
+  --clr-secondary: hsl(229, 56%, 72%);
+  --clr-accent-200: hsl(226, 42%, 88%);
+  --clr-accent-100: hsl(225, 10%, 92%);
+
+  --ff-primary: "Roboto", sans-serif;
+
+  --ff-body: var(--ff-primary);
+  --ff-heading: var(--ff-primary);
+
+  --fw-regular: 400;
+  --fw-semi-bold: 500;
+  --fw-bold: 700;
+
+  --fs-100: clamp(0.7813rem, 0.7747rem + 0.0326vi, 0.8rem);
+  --fs-200: clamp(0.9375rem, 0.9158rem + 0.1087vi, 1rem);
+  --fs-300: clamp(1.125rem, 1.0815rem + 0.2174vi, 1.25rem);
+  --fs-400: clamp(1.35rem, 1.2761rem + 0.3696vi, 1.5625rem);
+  --fs-500: clamp(1.62rem, 1.5041rem + 0.5793vi, 1.9531rem);
+  --fs-600: clamp(1.944rem, 1.771rem + 0.8651vi, 2.4414rem);
+  --fs-700: clamp(2.3328rem, 2.0827rem + 1.2504vi, 3.0518rem);
+  --fs-800: clamp(2.7994rem, 2.4462rem + 1.7658vi, 3.8147rem);
+
+  --fs-body: var(--fs-200);
+  --fs-primary-heading: var(--fs-600);
+  --fs-secondary-heading: var(--fs-500);
+  --fs-nav: var(--fs-200);
+  --fs-button: var(--fs-200);
+
+  --size-100: 0.25rem;
+  --size-200: 0.5rem;
+  --size-300: 0.75rem;
+  --size-400: 1rem;
+  --size-500: 1.5rem;
+  --size-600: 2rem;
+  --size-700: 3rem;
+  --size-800: 4rem;
+  --size-900: 5rem;
+}
+
+/* @media (min-width: 50em) {
+  :root {
+    --fs-body: var(--fs-500);
+    --fs-primary-heading: var(--fs-700);
+    --fs-secondary-heading: var(--fs-600);
+
+    --fs-nav: var(--fs-500);
+  }
+} */
+
+/* Box sizing rules */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* Remove default margin */
+* {
+  margin: 0;
+  padding: 0;
+  font: inherit;
+}
+
+/* Remove list styles on ul, ol elements with a list role, which suggests default styling will be removed */
+ul[role="list"],
+ol[role="list"] {
+  list-style: none;
+}
+
+/* Set core root defaults */
+html:focus-within {
+  scroll-behavior: smooth;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+/* Set core body defaults */
+body {
+  text-rendering: optimizeSpeed;
+  line-height: 1.5;
+}
+
+/* A elements that don't have a class get default styles */
+a:not([class]) {
+  text-decoration-skip-ink: auto;
+}
+
+/* Make images easier to work with */
+img,
+picture,
+svg {
+  max-width: 100%;
+  display: block;
+}
+
+/* Remove all animations, transitions and smooth scroll for people that prefer not to see them */
+@media (prefers-reduced-motion: reduce) {
+  html:focus-within {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* general styling */
+
+body {
+  font-size: var(--fs-body);
+  font-family: var(--ff-body);
+  color: var(--clr-primary-400);
+  background-color: var(--clr-accent-100);
+}
+
+p:not([class]) {
+  opacity: 0.7;
+  max-width: 50ch;
+  margin: auto;
+  margin-top: 1em;
+}
+
+/* button */
+
+.button {
+  cursor: pointer;
+  text-decoration: none;
+  border: 0;
+  border-radius: var(--size-200);
+  padding: 0.7em 2em;
+  text-align: center;
+  font-weight: var(--fw-bold);
+  font-size: var(--fs-button);
+  line-height: 1;
+  color: var(--clr-text);
+  background-color: var(--clr-secondary);
+}
+
+.button-fixed-width {
+  max-width: 10em;
+  min-width: 10em;
+  margin: auto;
+}
+
+.button:hover,
+.button:focus-visible {
+  background-color: var(--clr-secondary);
+}
+
+.remove-button-border {
+  border: none;
+  background-color: transparent;
+}
+
+.center--button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.button--click:focus {
+  background: #e5e5e5;
+  -webkit-box-shadow: inset 0px 0px 5px #c1c1c1;
+  -moz-box-shadow: inset 0px 0px 5px #c1c1c1;
+  box-shadow: inset 0px 0px 5px #c1c1c1;
+  outline: none;
+}
+
+.button--thicc {
+  padding: 1.5em;
+}
+
+/* navigaton */
+
+.primary-header {
+  padding-top: var(--size-400);
+}
+
+.nav-logo {
+  text-decoration: none;
+  color: var(--clr-primary);
+  font-size: var(--fs-300);
+}
+
+.nav-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.nav-list {
+  display: flex;
+  gap: clamp(var(--size-300), 2vw, var(--size-700));
+  font-weight: var(--fw-regular);
+  font-size: var(--fs-nav);
+  color: var(--clr-text);
+}
+
+.nav-list-link {
+  text-decoration: none;
+  color: var(--clr-text);
+}
+
+.nav-list-link::after {
+  display: block;
+  content: "";
+  border-bottom: solid 0.1em var(--clr-text);
+  transform: scaleX(1);
+  transition: transform 250ms ease-in-out;
+}
+
+.nav-list-link:hover::after {
+  transform: scaleX(0);
+  transform-origin: 0% 50%;
+}
+
+table {
+  width: 100%;
+  border-spacing: 0;
+  border-collapse: separate;
+  background-color: var(--white);
+  border-radius: 0.3rem;
+  overflow: hidden;
+  border: var(--light-border);
+}
+
+th,
+td {
+  padding: 0.5rem;
+  text-align: left;
+}
+
+td {
+  border-top: var(--light-border);
+  color: var(--black);
+}
+
+td:first-child {
+  color: var(--blue);
+}
+
+th {
+  background: var(--medium-grey);
+  color: var(--black);
+}
+
+/* Quiz */
+
+.timer {
+  background-color: var(--clr-accent-200);
+  border-radius: 1em;
+  display: grid;
+  place-self: start;
+}
+
+.timer-bar {
+  border-radius: 1em;
+  height: 1.5rem;
+  background: linear-gradient(to bottom, var(--clr-accent), var(--clr-primary));
+  animation: roundtimelinear forwards;
+}
+
+@keyframes roundtime {
+  0% {
+    width: 100%;
+  }
+  100% {
+    width: 0%;
+  }
+}
+
+.info {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  gap: 1em;
+  padding-top: 1rem;
+}
+
+.last {
+  grid-column: 8;
+}
+
+.middle {
+  grid-column: 7;
+}
+
+.score {
+  text-align: center;
+  background-color: var(--clr-accent-200);
+  width: 5em;
+  padding-block: 0.5em;
+  border-radius: 0.5em;
+}
+
+.wrapper {
+  max-width: 700px;
+}
+
+.grid-wrapper {
+  max-width: 500px;
+  margin-inline: auto;
+  padding-top: 2em;
+}
+
+.display-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1em;
+}
+
+.display-grid h2 {
+  grid-column: span 2;
+}
+
+.wrong-answer {
+  animation: shake 0.2s ease-in-out 0s 2;
+}
+
+.right-answer {
+  color: var(--clr-primary);
+}
+
+@keyframes shake {
+  0% {
+    margin-left: 0rem;
+    color: var(--clr-accent-200);
+  }
+  25% {
+    margin-left: 0.5rem;
+    color: var(--clr-accent-200);
+  }
+  75% {
+    margin-left: -0.5rem;
+    color: var(--clr-accent-200);
+  }
+  100% {
+    margin-left: 0rem;
+    color: var(--clr-accent-200);
+  }
+}
+
+/* Game Over  */
+
+.game-over-links {
+  margin-inline: auto;
+  display: flex;
+  gap: 1em;
+}
+
+/* User log in page */
+.form-display-flex {
+  display: flex;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  gap: 1rem;
+  max-width: 400px;
+  margin-inline: auto;
+}
+
+.form-border {
+  padding: 1em;
+  border-radius: 0.3rem;
+}
+
+.form-wrapper {
+}
+
+.email {
+  flex-grow: 1;
+  flex-basis: 500px;
+}
+
+.form-input {
+  border: 2px solid var(--clr-primary);
+  background-color: var(--clr-accent-100);
+  border-radius: 0.3rem;
+  padding: 0.3em;
+}
+
+.password {
+  flex-grow: 1;
+  flex-basis: 500px;
+}
+
+.form-button {
+  flex-grow: 1;
+  flex-basis: 200px;
+}
+
+.account-signup {
+  display: flex;
+  flex-direction: row;
+  gap: 1em;
+  align-items: center;
+}
+
+.signup-button {
+  border: none;
+  color: var(--clr-primary);
+  cursor: pointer;
+}
+
+.form-right {
+  background-color: var(--clr-accent-200);
+  height: 100vh;
+}
+/* Utility classes */
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap; /* added line */
+  border: 0;
+}
+
+.no-background {
+  background-color: var(--clr-accent-100);
+}
+
+.container {
+  --max-width: 1240px;
+  --padding: 1rem;
+  width: min(var(--max-width), 100% - (var(--padding) * 2));
+  margin-inline: auto;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  text-align: center;
+  list-style: none;
+  gap: 1rem;
+  margin-inline: auto;
+}
+
+.bg-clr {
+  background-color: var(--clr-accent-200);
+  margin-inline: 2rem;
+  border-radius: 0.5em;
+}
+
+.margin-bottom {
+  margin-bottom: 2rem;
+  background-color: var(--clr-accent-100);
+  border-radius: 0.5em;
+  max-width: 200px;
+  margin-inline: auto;
+  padding-block: 0.2em;
+}
+
+.grid li {
+  border: 5px solid var(--clr-secondary);
+  background-color: var(--clr-accent-100);
+  padding: 1em;
+  border-radius: 0.5em;
+  margin: 0 auto;
+  margin-inline: auto;
+}
+
+strong {
+  font-weight: var(--fw-semi-bold);
+  color: var(--clr-accent);
+}
+
+:where(.flow :not(:first-child)) {
+  margin-top: var(--flow-spacer, 2em);
+}
+
+.extra-padding {
+  padding: 2em;
+}
+
+.bg-clr-accent-200 {
+  background-color: var(--clr-accent-200);
+}
+
+.rounded-borders {
+  border-radius: var(--size-300);
+}
+
+.full-view-height {
+  height: 100vh;
+}
+
+.vertical-align-center {
+  align-items: center;
+}
+
+.text-align-center {
+  text-align: center;
+}
+
+.space-between {
+  display: flex;
+  justify-content: space-between;
+}
+
+.center-content-flex {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.place-content-center {
+  place-content: center;
+}
+
+.justify-self-end {
+  justify-self: end;
+}
+
+.fw-bold {
+  font-weight: var(--fw-bold);
+}
+.fw-semi-bold {
+  font-weight: var(--fw-semi-bold);
+}
+.fw-regular {
+  font-weight: var(--fw-regular);
+}
+
+.fs-primary-heading {
+  font-size: var(--fs-primary-heading);
+  line-height: 1.1;
+}
+
+.fs-secondary-heading {
+  font-size: var(--fs-secondary-heading);
+  line-height: 1.1;
+}
+
+.fs-300 {
+  font-size: var(--fs-300);
+}
+.fs-400 {
+  font-size: var(--fs-400);
+}
+.fs-500 {
+  font-size: var(--fs-500);
+}
+.fs-600 {
+  font-size: var(--fs-600);
+}
+
+.padding-top-900 {
+  padding-top: var(--size-900);
+}
+
+.padding-block-900 {
+  padding-block: var(--size-900);
+}
+
+.padding-block-700 {
+  padding-block: var(--size-700);
+}
+
+.padding-block-600 {
+  padding-block: var(--size-600);
+}
